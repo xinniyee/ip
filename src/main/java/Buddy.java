@@ -61,7 +61,7 @@ public class Buddy {
             } else if (userInput.startsWith("deadline")) {
                 String[] parts = userInput.substring(8).split(" /by ", 2);
                 if (parts[0].trim().isEmpty() || parts.length < 2 || parts[1].trim().isEmpty()) {
-                    printError("The description or deadline cannot be empty.");
+                    printError("The description or deadline must be provided.");
                 } else {
                     Task newTask = new Deadline(parts[0].trim(), parts[1].trim());
                     tasks.add(newTask);
@@ -70,14 +70,26 @@ public class Buddy {
             } else if (userInput.startsWith("event")) {
                 String[] parts = userInput.substring(5).split(" /from | /to ", 3);
                 if (parts[0].trim().isEmpty() || parts.length < 3 || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
-                    printError("The description, start time, or end time of an event cannot be empty.");
+                    printError("The description, start time, or end time of an event must be provided.");
                 } else {
                     Task newTask = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
                     tasks.add(newTask);
                     printAddTask(newTask);
                 }
-            } else {
-                printError("I'm sorry, but I don't know what that means :-(");
+            } else if (userInput.startsWith("delete")) {
+                try {
+                    int index = parseTaskIndex(userInput, "delete");
+                    Task removedTask = tasks.remove(index);
+                    printLine();
+                    System.out.println("Noted. I've removed this task:");
+                    System.out.println(" " + removedTask);
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    printLine();
+                } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                    printError("Invalid task number for deletion.");
+                }
+            }else {
+                printError("I'm sorry, but I don't know what you mean");
             }
         }
 
