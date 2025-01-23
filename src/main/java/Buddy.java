@@ -27,48 +27,57 @@ public class Buddy {
                     System.out.println((i + 1) + "." + tasks.get(i));
                 }
                 printLine();
-            } else if (userInput.startsWith("mark ")) {
-                int index = parseTaskIndex(userInput, "mark");
-                if (index >= 0 && index < tasks.size()) {
+            } else if (userInput.startsWith("mark")) {
+                try {
+                    int index = parseTaskIndex(userInput, "mark");
                     tasks.get(index).markAsDone();
                     printLine();
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println(tasks.get(index));
                     printLine();
+                } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                    printError("Invalid task number for marking as done.");
                 }
-            } else if (userInput.startsWith("unmark ")) {
-                int index = parseTaskIndex(userInput, "unmark");
-                if (index >= 0 && index < tasks.size()) {
+            } else if (userInput.startsWith("unmark")) {
+                try {
+                    int index = parseTaskIndex(userInput, "unmark");
                     tasks.get(index).unmarkAsDone();
                     printLine();
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println(tasks.get(index));
                     printLine();
+                } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                    printError("Invalid task number for unmarking.");
                 }
-            } else if (userInput.startsWith("todo ")) {
-                String description = userInput.substring(5).trim();
-                Task newTask = new ToDo(description);
-                tasks.add(newTask);
-                printAddTask(newTask);
-            } else if (userInput.startsWith("deadline ")) {
-                String[] parts = userInput.substring(9).split(" /by ", 2);
-                String description = parts[0].trim();
-                String by = parts.length > 1 ? parts[1].trim() : "";
-                Task newTask = new Deadline(description, by);
-                tasks.add(newTask);
-                printAddTask(newTask);
-            } else if (userInput.startsWith("event ")) {
-                String[] parts = userInput.substring(6).split(" /from | /to ", 3);
-                String description = parts[0].trim();
-                String from = parts.length > 1 ? parts[1].trim() : "";
-                String to = parts.length > 2 ? parts[2].trim() : "";
-                Task newTask = new Event(description, from, to);
-                tasks.add(newTask);
-                printAddTask(newTask);
+            } else if (userInput.startsWith("todo")) {
+                String description = userInput.substring(4).trim();
+                if (description.isEmpty()) {
+                    printError("The description of a todo cannot be empty.");
+                } else {
+                    Task newTask = new ToDo(description);
+                    tasks.add(newTask);
+                    printAddTask(newTask);
+                }
+            } else if (userInput.startsWith("deadline")) {
+                String[] parts = userInput.substring(8).split(" /by ", 2);
+                if (parts[0].trim().isEmpty() || parts.length < 2 || parts[1].trim().isEmpty()) {
+                    printError("The description or deadline cannot be empty.");
+                } else {
+                    Task newTask = new Deadline(parts[0].trim(), parts[1].trim());
+                    tasks.add(newTask);
+                    printAddTask(newTask);
+                }
+            } else if (userInput.startsWith("event")) {
+                String[] parts = userInput.substring(5).split(" /from | /to ", 3);
+                if (parts[0].trim().isEmpty() || parts.length < 3 || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
+                    printError("The description, start time, or end time of an event cannot be empty.");
+                } else {
+                    Task newTask = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
+                    tasks.add(newTask);
+                    printAddTask(newTask);
+                }
             } else {
-                Task newTask = new Task(userInput);
-                tasks.add(newTask);
-                printAddTask(newTask);
+                printError("I'm sorry, but I don't know what that means :-(");
             }
         }
 
@@ -85,6 +94,12 @@ public class Buddy {
 
     private static int parseTaskIndex(String input, String command) {
         return Integer.parseInt(input.substring(command.length()).trim()) - 1; // Convert to zero-based index
+    }
+
+    private static void printError(String message) {
+        printLine();
+        System.out.println(message);
+        printLine();
     }
 
     private static void printLine() {
