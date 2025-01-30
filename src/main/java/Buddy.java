@@ -1,11 +1,22 @@
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Buddy {
-    private static final ArrayList<Task> tasks = new ArrayList<>();
+    private static ArrayList<Task> tasks;
+    private static final String FILE_PATH = Paths.get("data", "Buddy.txt").toString();
+    private static final Storage storage = new Storage(FILE_PATH);
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        try {
+            tasks = (ArrayList<Task>) storage.load();
+        } catch (IOException e) {
+            System.out.println("Error loading tasks from file: " + e.getMessage());
+            tasks = new ArrayList<>();
+        }
 
         printLine();
         System.out.println("Hello! I'm Buddy");
@@ -19,6 +30,11 @@ public class Buddy {
                 printLine();
                 System.out.println("Bye. Hope to see you again soon!");
                 printLine();
+                try {
+                    storage.save(tasks);
+                } catch (IOException e) {
+                    System.out.println("Error saving tasks to file: " + e.getMessage());
+                }
                 break;
             } else if (userInput.equals("list")) {
                 printLine();
