@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -79,18 +81,34 @@ public class Buddy {
                 if (parts[0].trim().isEmpty() || parts.length < 2 || parts[1].trim().isEmpty()) {
                     printError("The description or deadline must be provided.");
                 } else {
-                    Task newTask = new Deadline(parts[0].trim(), parts[1].trim());
-                    tasks.add(newTask);
-                    printAddTask(newTask);
+                    try {
+                        String dateString = parts[1].trim();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                        LocalDateTime deadline = LocalDateTime.parse(dateString, formatter);
+                        Task newTask = new Deadline(parts[0].trim(), deadline.format(formatter));
+                        tasks.add(newTask);
+                        printAddTask(newTask);
+                    } catch (Exception e) {
+                        printError("Invalid date format. Please use yyyy-MM-dd HHmm.");
+                    }
                 }
             } else if (userInput.startsWith("event")) {
                 String[] parts = userInput.substring(5).split(" /from | /to ", 3);
                 if (parts[0].trim().isEmpty() || parts.length < 3 || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
                     printError("The description, start time, or end time of an event must be provided.");
                 } else {
-                    Task newTask = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
-                    tasks.add(newTask);
-                    printAddTask(newTask);
+                    try {
+                        String startDateString = parts[1].trim();
+                        String endDateString = parts[2].trim();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                        LocalDateTime start = LocalDateTime.parse(startDateString, formatter);
+                        LocalDateTime end = LocalDateTime.parse(endDateString, formatter);
+                        Task newTask = new Event(parts[0].trim(), start.format(formatter), end.format(formatter));
+                        tasks.add(newTask);
+                        printAddTask(newTask);
+                    } catch (Exception e) {
+                        printError("Invalid date format. Please use yyyy-MM-dd HHmm.");
+                    }
                 }
             } else if (userInput.startsWith("delete")) {
                 try {
