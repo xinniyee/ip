@@ -1,3 +1,5 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,11 +34,13 @@ public class Storage {
         return tasks;
     }
 
-    public void save(List<Task> tasks) throws IOException {
-        List<String> lines = tasks.stream()
-                .map(Task::toFileFormat)
-                .collect(Collectors.toList());
-        Files.write(filePath, lines);
+    public void save(TaskList taskList) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toString()))) {
+            for (Task task : taskList.getTasks()) {  // Assuming TaskList has getTasks() method
+                writer.write(task.toFileFormat());   // Assuming Task has a method to convert it to a file-friendly string
+                writer.newLine();
+            }
+        }
     }
 
     // Converts a line from file format to the corresponding Task object

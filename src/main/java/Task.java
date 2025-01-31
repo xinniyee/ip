@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public abstract class Task {
     protected String description;
@@ -19,7 +20,7 @@ public abstract class Task {
     }
 
     public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
+        return "[" + (isDone ? "X" : " ") + "]"; // mark done task with X
     }
 
     public abstract String toFileFormat();
@@ -56,6 +57,7 @@ class Deadline extends Task {
     public Deadline(String description, String by, boolean isDone) {
         super(description, isDone);
         this.by = LocalDateTime.parse(by, DateTimeFormatter.ofPattern(("yyyy-MM-dd HHmm")));
+
     }
 
     @Override
@@ -77,12 +79,13 @@ class Event extends Task {
         super(description, false);
         this.from = LocalDateTime.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
         this.to = LocalDateTime.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+
     }
 
-    public Event(String description, String from, String to, boolean isDone) {
-        super(description, isDone);
-        this.from = LocalDateTime.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
-        this.to = LocalDateTime.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+    public Event(String description, String from, String to, boolean isDone){
+            super(description, isDone);
+            this.from = LocalDateTime.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+            this.to = LocalDateTime.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
     }
 
     @Override
