@@ -1,3 +1,5 @@
+package Buddy;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -6,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class Storage {
@@ -36,14 +37,14 @@ public class Storage {
 
     public void save(TaskList taskList) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toString()))) {
-            for (Task task : taskList.getTasks()) {  // Assuming TaskList has getTasks() method
-                writer.write(task.toFileFormat());   // Assuming Task has a method to convert it to a file-friendly string
+            for (Task task : taskList.getTasks()) {  // Assuming Duke.TaskList has getTasks() method
+                writer.write(task.toFileFormat());   // Assuming Duke.Task has a method to convert it to a file-friendly string
                 writer.newLine();
             }
         }
     }
 
-    // Converts a line from file format to the corresponding Task object
+    // Converts a line from file format to the corresponding Duke.Task object
     private static Task fromFileFormat(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
@@ -58,11 +59,11 @@ public class Storage {
             case "T":
                 return new ToDo(description, isDone);
             case "D":
-                if (parts.length < 4) return null; // Incomplete data for Deadline
+                if (parts.length < 4) return null; // Incomplete data for task.Deadline
                 String by = parts[3];
                 return new Deadline(description, by, isDone);
             case "E":
-                if (parts.length < 5) return null; // Incomplete data for Event
+                if (parts.length < 5) return null; // Incomplete data for task.Event
                 String from = parts[3];
                 String to = parts[4];
                 return new Event(description, from, to, isDone);

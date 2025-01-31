@@ -1,6 +1,7 @@
+package Buddy;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public abstract class Task {
     protected String description;

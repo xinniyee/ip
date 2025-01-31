@@ -1,3 +1,5 @@
+package Buddy;
+
 import java.util.ArrayList;
 
 public class Ui {
@@ -7,7 +9,7 @@ public class Ui {
 
     public static void showWelcomeMessage() {
         printLine();
-        System.out.println("Hello! I'm Buddy");
+        System.out.println("Hello! I'm Duke.Buddy");
         System.out.println("What can I do for you?");
         printLine();
     }

@@ -1,4 +1,4 @@
-import jdk.jfr.Description;
+package Buddy;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,13 +18,15 @@ public class Parser {
         } else if (input.startsWith("delete")) {
             int index = parseTaskIndex(input, "delete");
             taskList.deleteTask(index);
-        } else {
+        } else if (input.isEmpty()) {
+            Ui.printError("Please provide an input.");
+        } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")){
             Task newTask = parseTask(input);
             if (newTask != null) {
                 taskList.addTask(newTask);
-            } /*else {
-                Ui.printError("I'm sorry, but I don't know what you mean.");
-            }*/
+            }
+        } else {
+            Ui.printError("Sorry, I'm not sure what you mean.");
         }
     }
 
