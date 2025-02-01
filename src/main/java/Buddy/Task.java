@@ -20,8 +20,16 @@ public abstract class Task {
         this.isDone = false;
     }
 
+    public boolean isDone() {
+        return isDone;
+    }
+
     public String getStatusIcon() {
         return "[" + (isDone ? "X" : " ") + "]"; // mark done task with X
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public abstract String toFileFormat();
@@ -61,6 +69,11 @@ class Deadline extends Task {
 
     }
 
+    public String getFormattedTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+        return by.format(formatter);
+    }
+
     @Override
     public String toFileFormat() {
         return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
@@ -87,6 +100,16 @@ class Event extends Task {
             super(description, isDone);
             this.from = LocalDateTime.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
             this.to = LocalDateTime.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+    }
+
+    public String getFormattedStartTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+        return from.format(formatter);
+    }
+
+    public String getFormattedEndTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+        return to.format(formatter);
     }
 
     @Override

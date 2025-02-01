@@ -46,6 +46,14 @@ public class TaskList {
         Ui.printTaskList(tasks);
     }
 
+    public int size() {
+        return tasks.size();
+    }
+
+    public Task get(int index) {
+        return tasks.get(index);
+    }
+
     public ArrayList<Task> getTasks() {
         return tasks;
     }
