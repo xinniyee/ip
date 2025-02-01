@@ -1,4 +1,4 @@
-package Buddy;
+package buddy;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

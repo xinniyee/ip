@@ -1,4 +1,4 @@
-package Buddy;
+package buddy;
 
 import java.util.ArrayList;
 
