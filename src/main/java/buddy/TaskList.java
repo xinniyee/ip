@@ -73,6 +73,27 @@ public class TaskList {
     }
 
     /**
+     * Finds tasks that contain the given keyword in their description.
+     *
+     * @param keyword the keyword to search for
+     */
+    public void findTasks(String keyword) {
+        TaskList matchingTaskList = new TaskList(new ArrayList<>());
+
+        for (Task task : tasks) {
+            if (task.toString().toLowerCase().contains(keyword.toLowerCase())) {
+                matchingTaskList.addTask(task);
+            }
+        }
+
+        if (matchingTaskList.isEmpty()) {
+            Ui.printError("No matching tasks found.");
+        } else {
+            Ui.printFoundTasks(matchingTaskList);
+        }
+    }
+
+    /**
      * Lists all tasks in the TaskList.
      */
     public void listTasks() {
@@ -96,6 +117,15 @@ public class TaskList {
      */
     public Task get(int index) {
         return tasks.get(index);
+    }
+
+    /**
+     * Checks if the TaskList instance is empty.
+     *
+     * @return true if the TaskList is empty, false otherwise.
+     */
+    public boolean isEmpty() {
+        return tasks.isEmpty();
     }
 
     /**

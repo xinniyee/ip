@@ -105,6 +105,20 @@ public class Ui {
     }
 
     /**
+     * Prints a list of tasks that match the search keyword.
+     *
+     * @param matchingTaskList the list of tasks that matched the search
+     */
+    public static void printFoundTasks(TaskList matchingTaskList) {
+        printLine();
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTaskList.size(); i++) {
+            System.out.println((i + 1) + "." + matchingTaskList.get(i));
+        }
+        printLine();
+    }
+
+    /**
      * Displays a goodbye message when the program ends.
      */
     public static void printGoodbye() {
