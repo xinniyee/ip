@@ -3,7 +3,17 @@ package Buddy;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Handles parsing of user input and executing the corresponding commands.
+ */
 public class Parser {
+
+    /**
+     * Parses and executes the given command.
+     *
+     * @param input The user input command.
+     * @param taskList  The task list to modify based on the command.
+     */
     public static void parseCommand(String input, TaskList taskList) {
         if (input.equals("bye")) {
             Ui.printGoodbye();
@@ -30,6 +40,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a task creation command and returns the corresponding Task object.
+     *
+     * @param input The user input containing task details.
+     * @return  The created Task object, or null if the input is invalid.
+     */
     private static Task parseTask(String input) {
         if (input.startsWith("todo")) {
             String description = input.substring(4).trim();
@@ -72,6 +88,13 @@ public class Parser {
         return null;
     }
 
+    /**
+     * Parses the task index from a command input string.
+     *
+     * @param input The full command string.
+     * @param command   The specific command (e.g. "mark", "delete")
+     * @return  The parsed task index, or -1 if invalid.
+     */
     private static int parseTaskIndex(String input, String command) {
         try {
             return Integer.parseInt(input.substring(command.length()).trim());

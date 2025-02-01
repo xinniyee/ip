@@ -5,11 +5,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The main class for the Buddy application.
+ * Handles initialization, user interaction and execution flow.
+ */
 public class Buddy {
     private static final String FILE_PATH = Paths.get("data", "Buddy.txt").toString();
     private final Storage storage;
     private final TaskList taskList;
 
+    /**
+     * Constructs a new instance of Buddy.
+     * Initializes storage, loads tasks from file, and sets up the task list.
+     */
     public Buddy() {
         this.storage = new Storage(FILE_PATH);
         ArrayList<Task> loadedTasks;
@@ -22,6 +30,10 @@ public class Buddy {
         this.taskList = new TaskList(loadedTasks);
     }
 
+    /**
+     * Starts the Buddy application.
+     * Displays a welcome message and continuously processes user input.
+     */
     public void run() {
         Ui.showWelcomeMessage();
         Scanner scanner = new Scanner(System.in);
@@ -37,6 +49,9 @@ public class Buddy {
         scanner.close();
     }
 
+    /**
+     * Handles the exit process by displaying a goodbye message and saving tasks to file.
+     */
     private void exit() {
         Ui.printGoodbye();
         try {
@@ -46,6 +61,10 @@ public class Buddy {
         }
     }
 
+   /**
+    * The main entry point for the Buddy application.
+    * Initializes and runs the application.
+    */
     public static void main(String[] args) {
         new Buddy().run();
     }

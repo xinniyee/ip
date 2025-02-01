@@ -10,13 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Handles loading and saving tasks to a file.
+ * This class provides persistent storage for tasks by reading from and writing to a specified class.
+ */
 public class Storage {
     private final Path filePath;
 
+    /**
+     * Constructs a Storage instance with the specified file path.
+     *
+     * @param filePath  The path to the file where tasks are stored.
+     */
     public Storage(String filePath) {
         this.filePath = Paths.get(filePath);
     }
 
+    /**
+     * Loads tasks from the file.
+     * If the file does not exist, it creates a new file and returns an empty list.
+     *
+     * @return  A list of tasks loaded from the file.
+     * @throws IOException  If an error occurs while reading the file.
+     */
     public List<Task> load() throws IOException {
         if (!Files.exists(filePath)) {
             Files.createDirectories(filePath.getParent()); // Ensure the directory exists
@@ -35,6 +51,12 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Saves the current list of tasks to the file.
+     *
+     * @param taskList  The TaskList containing tasks to be saved.
+     * @throws IOException  If an error occurs while writing to the file.
+     */
     public void save(TaskList taskList) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toString()))) {
             for (Task task : taskList.getTasks()) {  // Assuming Duke.TaskList has getTasks() method
@@ -44,7 +66,12 @@ public class Storage {
         }
     }
 
-    // Converts a line from file format to the corresponding Duke.Task object
+    /**
+     * Converts a line from file format to the corresponding Task object.
+     *
+     * @param line  A string representing a task in file storage format.
+     * @return A Task object corresponding to the given line, or null if the format is invalid.
+     */
     private static Task fromFileFormat(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
