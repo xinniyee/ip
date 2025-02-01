@@ -1,4 +1,4 @@
-package Buddy;
+package buddy;
 
 
 import org.junit.jupiter.api.Test;

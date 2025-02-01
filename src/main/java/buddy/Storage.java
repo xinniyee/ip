@@ -1,4 +1,4 @@
-package Buddy;
+package buddy;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

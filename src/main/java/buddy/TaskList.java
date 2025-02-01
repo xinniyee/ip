@@ -1,4 +1,4 @@
-package Buddy;
+package buddy;
 
 import java.util.ArrayList;
 
@@ -42,6 +42,27 @@ public class TaskList {
         Ui.printUnmarkTask(tasks.get(index - 1));
     }
 
+    /**
+     * Finds tasks that contain the given keyword in their description.
+     *
+     * @param keyword the keyword to search for
+     */
+    public void findTasks(String keyword) {
+        TaskList matchingTaskList = new TaskList(new ArrayList<>());
+
+        for (Task task : tasks) {
+            if (task.toString().toLowerCase().contains(keyword.toLowerCase())) {
+                matchingTaskList.addTask(task);
+            }
+        }
+
+        if (matchingTaskList.isEmpty()) {
+            Ui.printError("No matching tasks found.");
+        } else {
+            Ui.printFoundTasks(matchingTaskList);
+        }
+    }
+
     public void listTasks() {
         Ui.printTaskList(tasks);
     }
@@ -52,6 +73,15 @@ public class TaskList {
 
     public Task get(int index) {
         return tasks.get(index);
+    }
+
+    /**
+     * Checks if the TaskList instance is empty.
+     *
+     * @return true if the TaskList is empty, false otherwise.
+     */
+    public boolean isEmpty() {
+        return tasks.isEmpty();
     }
 
     public ArrayList<Task> getTasks() {

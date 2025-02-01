@@ -1,4 +1,4 @@
-package Buddy;
+package buddy;
 
 import java.util.ArrayList;
 
@@ -56,6 +56,20 @@ public class Ui {
     public static void printError(String message) {
         printLine();
         System.out.println(message);
+        printLine();
+    }
+
+    /**
+     * Prints a list of tasks that match the search keyword.
+     *
+     * @param matchingTaskList the list of tasks that matched the search
+     */
+    public static void printFoundTasks(TaskList matchingTaskList) {
+        printLine();
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTaskList.size(); i++) {
+            System.out.println((i + 1) + "." + matchingTaskList.get(i));
+        }
         printLine();
     }
 

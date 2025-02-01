@@ -1,4 +1,4 @@
-package Buddy;
+package buddy;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,8 +20,9 @@ public class Parser {
             taskList.deleteTask(index);
         } else if (input.isEmpty()) {
             Ui.printError("Please provide an input.");
-        } else if (input.startsWith("todo") || input.startsWith("deadline") || input.startsWith("event")){
-            Task newTask = parseTask(input);
+        } else if (input.startsWith("todo") || input.startsWith("deadline")
+                || input.startsWith("event") || input.startsWith("find")){
+            Task newTask = parseTask(taskList, input);
             if (newTask != null) {
                 taskList.addTask(newTask);
             }
@@ -30,7 +31,7 @@ public class Parser {
         }
     }
 
-    private static Task parseTask(String input) {
+    private static Task parseTask(TaskList taskList, String input) {
         if (input.startsWith("todo")) {
             String description = input.substring(4).trim();
             if (description.isEmpty()) {
@@ -67,6 +68,14 @@ public class Parser {
                 } catch (Exception e) {
                     Ui.printError("Invalid date format. Please use yyyy-MM-dd HHmm.");
                 }
+            }
+        } else if (input.startsWith("find")) {
+            String command = input.trim().split(" ")[0].toLowerCase();
+            String argument = input.substring(command.length()).trim();
+            if (argument.isEmpty()) {
+                Ui.printError("Please specify a keyword to search for.");
+            } else {
+                taskList.findTasks(argument);
             }
         }
         return null;
