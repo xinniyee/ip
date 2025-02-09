@@ -3,16 +3,24 @@ package buddy;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ParserTest {
 
+    private final Storage storage = new Storage(Paths.get("data", "Buddy.txt").toString());
+
     @Test
     public void testParseTodo() {
         TaskList taskList = new TaskList(new ArrayList<>());
-        Parser.parseCommand("todo read book", taskList);
+        try {
+            Parser.parseCommand("todo read book", taskList, storage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         assertEquals(1, taskList.size());
         assertInstanceOf(ToDo.class, taskList.get(0));
@@ -22,7 +30,11 @@ public class ParserTest {
     @Test
     public void testParseDeadline() {
         TaskList taskList = new TaskList(new ArrayList<>());
-        Parser.parseCommand("deadline return book /by 2024-12-01 1800", taskList);
+        try {
+            Parser.parseCommand("deadline return book /by 2024-12-01 1800", taskList, storage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         assertEquals(1, taskList.size());
         assertInstanceOf(Deadline.class, taskList.get(0));
@@ -33,7 +45,11 @@ public class ParserTest {
     @Test
     public void testParseEvent() {
         TaskList taskList = new TaskList(new ArrayList<>());
-        Parser.parseCommand("event project meeting /from 2024-12-05 1400 /to 2024-12-05 1600", taskList);
+        try {
+            Parser.parseCommand("event project meeting /from 2024-12-05 1400 /to 2024-12-05 1600", taskList, storage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         assertEquals(1, taskList.size());
         assertInstanceOf(Event.class, taskList.get(0));
@@ -43,19 +59,19 @@ public class ParserTest {
     }
 
     @Test
-    public void testParseDelete() {
+    public void testParseDelete() throws IOException {
         TaskList taskList = new TaskList(new ArrayList<>());
-        Parser.parseCommand("todo read book", taskList);
-        Parser.parseCommand("delete 1", taskList);
+        Parser.parseCommand("todo read book", taskList, storage);
+        Parser.parseCommand("delete 1", taskList, storage);
 
         assertEquals(0, taskList.size());
     }
 
     @Test
-    public void testParseMarkDone() {
+    public void testParseMarkDone() throws IOException {
         TaskList taskList = new TaskList(new ArrayList<>());
-        Parser.parseCommand("todo read book", taskList);
-        Parser.parseCommand("mark 1", taskList);
+        Parser.parseCommand("todo read book", taskList, storage);
+        Parser.parseCommand("mark 1", taskList, storage);
 
         assertTrue(taskList.get(0).isDone());
     }

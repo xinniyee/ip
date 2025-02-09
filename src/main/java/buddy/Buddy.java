@@ -36,7 +36,7 @@ public class Buddy {
      * Starts the Buddy application.
      * Displays a welcome message and continuously processes user input.
      */
-    public void run() {
+    public void run() throws IOException {
         Ui.showWelcomeMessage();
         Scanner scanner = new Scanner(System.in);
 
@@ -46,7 +46,7 @@ public class Buddy {
                 exit();
                 break;
             }
-            Parser.parseCommand(userInput, taskList);
+            Parser.parseCommand(userInput, taskList, storage);
         }
         scanner.close();
     }
@@ -68,6 +68,10 @@ public class Buddy {
     * Initializes and runs the application.
     */
     public static void main(String[] args) {
-        new Buddy().run();
+        try {
+            new Buddy().run();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
