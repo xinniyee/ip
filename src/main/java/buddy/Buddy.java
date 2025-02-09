@@ -46,7 +46,7 @@ public class Buddy {
                 exit();
                 break;
             }
-            Parser.parseCommand(userInput,taskList);
+            Parser.parseCommand(userInput, taskList);
         }
         scanner.close();
     }
@@ -63,7 +63,7 @@ public class Buddy {
         }
     }
 
-   /**
+    /**
     * The main entry point for the Buddy application.
     * Initializes and runs the application.
     */

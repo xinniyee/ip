@@ -61,8 +61,8 @@ public class Storage {
      */
     public void save(TaskList taskList) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toString()))) {
-            for (Task task : taskList.getTasks()) {  // Assuming Duke.TaskList has getTasks() method
-                writer.write(task.toFileFormat());   // Assuming Duke.Task has a method to convert it to a file-friendly string
+            for (Task task : taskList.getTasks()) {
+                writer.write(task.toFileFormat());
                 writer.newLine();
             }
         }
@@ -74,6 +74,7 @@ public class Storage {
      * @param line  A string representing a task in file storage format.
      * @return A Task object corresponding to the given line, or null if the format is invalid.
      */
+    @SuppressWarnings("checkstyle:Regexp")
     private static Task fromFileFormat(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
@@ -85,19 +86,23 @@ public class Storage {
         String description = parts[2];
 
         switch (type) {
-            case "T":
-                return new ToDo(description, isDone);
-            case "D":
-                if (parts.length < 4) return null; // Incomplete data for task.Deadline
-                String by = parts[3];
-                return new Deadline(description, by, isDone);
-            case "E":
-                if (parts.length < 5) return null; // Incomplete data for task.Event
-                String from = parts[3];
-                String to = parts[4];
-                return new Event(description, from, to, isDone);
-            default:
-                return null; // If the task type is not recognized
+        case "T":
+            return new ToDo(description, isDone);
+        case "D":
+            if (parts.length < 4) {
+                return null; // Incomplete data for task.Deadline
+            }
+            String by = parts[3];
+            return new Deadline(description, by, isDone);
+        case "E":
+            if (parts.length < 5) {
+                return null; // Incomplete data for task.Event
+            }
+            String from = parts[3];
+            String to = parts[4];
+            return new Event(description, from, to, isDone);
+        default:
+            return null; // If the task type is not recognized
         }
     }
 }

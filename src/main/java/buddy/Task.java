@@ -91,7 +91,7 @@ class ToDo extends Task {
      * @param isDone Whether the task is completed.
      */
     public ToDo(String description, boolean isDone) {
-       super(description, isDone);
+        super(description, isDone);
     }
 
     @Override
@@ -147,12 +147,14 @@ class Deadline extends Task {
 
     @Override
     public String toFileFormat() {
-        return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+        return "D | " + (isDone ? "1" : "0") + " | "
+                + description + " | " + by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
     }
 
     @Override
     public String toString() {
-        return "[D]" + getStatusIcon() + " " + description + " (by: " + by.format(DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a")) + ")";
+        return "[D]" + getStatusIcon() + " " + description
+                + " (by: " + by.format(DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a")) + ")";
     }
 }
 
@@ -185,10 +187,10 @@ class Event extends Task {
      * @param to The end date and time in "yyyy-MM-dd HHmm" format.
      * @param isDone Whether the task is completed.
      */
-    public Event(String description, String from, String to, boolean isDone){
-            super(description, isDone);
-            this.from = LocalDateTime.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
-            this.to = LocalDateTime.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+    public Event(String description, String from, String to, boolean isDone) {
+        super(description, isDone);
+        this.from = LocalDateTime.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+        this.to = LocalDateTime.parse(to, DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
     }
 
     /**
@@ -220,7 +222,8 @@ class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + getStatusIcon() + " " + description + " (from: " + from.format(DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a"))
+        return "[E]" + getStatusIcon() + " " + description + " (from: "
+                + from.format(DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a"))
                 + " to: " + to.format(DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a")) + ")";
     }
 }

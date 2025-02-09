@@ -31,7 +31,7 @@ public class Parser {
         } else if (input.isEmpty()) {
             Ui.printError("Please provide an input.");
         } else if (input.startsWith("todo") || input.startsWith("deadline")
-                || input.startsWith("event") || input.startsWith("find")){
+                || input.startsWith("event") || input.startsWith("find")) {
             Task newTask = parseTask(taskList, input);
             if (newTask != null) {
                 taskList.addTask(newTask);
@@ -71,7 +71,8 @@ public class Parser {
             }
         } else if (input.startsWith("event")) {
             String[] parts = input.substring(5).split(" /from | /to ", 3);
-            if (parts[0].trim().isEmpty() || parts.length < 3 || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
+            if (parts[0].trim().isEmpty() || parts.length < 3
+                    || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
                 Ui.printError("The description, start time, or end time of an event must be provided.");
             } else {
                 try {
