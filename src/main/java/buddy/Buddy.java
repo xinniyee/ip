@@ -26,7 +26,7 @@ public class Buddy {
         try {
             loadedTasks = (ArrayList<Task>) storage.load();
         } catch (IOException e) {
-            Ui.printError("Error loading tasks from file: " + e.getMessage());
+            Ui.getErrorMessage("Error loading tasks from file: " + e.getMessage());
             loadedTasks = new ArrayList<>();
         }
         this.taskList = new TaskList(loadedTasks);
@@ -55,13 +55,32 @@ public class Buddy {
      * Handles the exit process by displaying a goodbye message and saving tasks to file.
      */
     private void exit() {
-        Ui.printGoodbye();
+        Ui.getGoodbyeMessage();
         try {
             storage.save(taskList);
         } catch (IOException e) {
-            Ui.printError("Error saving tasks to file: " + e.getMessage());
+            Ui.getErrorMessage("Error saving tasks to file: " + e.getMessage());
         }
     }
+
+    public String getResponse(String input) {
+        try {
+            // Use a StringBuilder to capture the response
+            StringBuilder response = new StringBuilder();
+
+            if (input.equals("bye")) {
+                response.append("Goodbye! Hope to see you again soon.");
+            } else {
+                // Redirect input to the Parser
+                response.append(Parser.parseCommand(input, taskList, storage));
+            }
+
+            return response.toString();
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
 
     /**
     * The main entry point for the Buddy application.

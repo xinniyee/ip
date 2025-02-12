@@ -14,71 +14,77 @@ public class Parser {
      *
      * @param input The user input command.
      * @param taskList  The task list to modify based on the command.
+     * @param storage The storage to save changes
+     * @return The response message to be displayed to the user.
      */
-    public static void parseCommand(String input, TaskList taskList, Storage storage) throws IOException {
-        if (input.equals("bye")) {
-            Ui.printGoodbye();
-        } else if (input.equals("list")) {
-            taskList.listTasks();
+    public static String parseCommand(String input, TaskList taskList, Storage storage) throws IOException {
+        if (input.equals("list")) {
+            return taskList.listTasks();
         } else if (input.startsWith("mark")) {
             int index = parseTaskIndex(input, "mark");
-            taskList.markTaskAsDone(index);
+            String response = taskList.markTaskAsDone(index);
             storage.save(taskList);
+            return response;
         } else if (input.startsWith("unmark")) {
             int index = parseTaskIndex(input, "unmark");
-            taskList.unmarkTaskAsDone(index);
+            String response = taskList.unmarkTaskAsDone(index);
             storage.save(taskList);
+            return response;
         } else if (input.startsWith("delete")) {
             int index = parseTaskIndex(input, "delete");
-            taskList.deleteTask(index);
+            String response = taskList.deleteTask(index);
             storage.save(taskList);
+            return response;
         } else if (input.isEmpty()) {
-            Ui.printError("Please provide an input.");
+            return Ui.getErrorMessage("Please provide an input.");
         } else if (input.startsWith("todo") || input.startsWith("deadline")
-                || input.startsWith("event") || input.startsWith("find")) {
-            Task newTask = parseTask(taskList, input);
-            if (newTask != null) {
-                taskList.addTask(newTask);
-                storage.save(taskList);
+                || input.startsWith("event")) {
+            String response = parseTask(taskList, input, storage);
+            return response;
+        } else if (input.startsWith("find")) {
+            String keyword = input.substring(4).trim();
+            if (keyword.isEmpty()) {
+                return Ui.getErrorMessage("Please specify a keyword to search for.");
+            } else {
+                return taskList.findTasks(keyword);
             }
-        } else {
-            Ui.printError("Sorry, I'm not sure what you mean.");
         }
+        return Ui.getErrorMessage("Sorry, I'm not sure what you mean.");
     }
 
-    /**
-     * Parses a task creation command and returns the corresponding Task object.
-     *
-     * @param input The user input containing task details.
-     * @return  The created Task object, or null if the input is invalid.
-     */
-    private static Task parseTask(TaskList taskList, String input) {
+    private static String parseTask(TaskList taskList, String input, Storage storage) throws IOException {
         if (input.startsWith("todo")) {
             String description = input.substring(4).trim();
             if (description.isEmpty()) {
-                Ui.printError("The description of a todo cannot be empty.");
+                return "The description of a todo cannot be empty.";
             } else {
-                return new ToDo(description);
+                ToDo newTask = new ToDo(description);
+                taskList.addTask(newTask);
+                storage.save(taskList);
+                return "Todo task added: " + description;
             }
         } else if (input.startsWith("deadline")) {
             String[] parts = input.substring(8).split(" /by ", 2);
             if (parts[0].trim().isEmpty() || parts.length < 2 || parts[1].trim().isEmpty()) {
-                Ui.printError("The description or deadline must be provided.");
+                return "The description or deadline must be provided.";
             } else {
                 try {
                     String dateString = parts[1].trim();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
                     LocalDateTime deadline = LocalDateTime.parse(dateString, formatter);
-                    return new Deadline(parts[0].trim(), deadline.format(formatter));
+                    Deadline newTask = new Deadline(parts[0].trim(), deadline.format(formatter));
+                    taskList.addTask(newTask);
+                    storage.save(taskList);
+                    return "Deadline task added: " + parts[0].trim() + " by " + deadline.format(formatter);
                 } catch (Exception e) {
-                    Ui.printError("Invalid date format. Please use yyyy-MM-dd HHmm.");
+                    return "Invalid date format. Please use yyyy-MM-dd HHmm.";
                 }
             }
         } else if (input.startsWith("event")) {
             String[] parts = input.substring(5).split(" /from | /to ", 3);
             if (parts[0].trim().isEmpty() || parts.length < 3
                     || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
-                Ui.printError("The description, start time, or end time of an event must be provided.");
+                return "The description, start time, or end time of an event must be provided.";
             } else {
                 try {
                     String startDateString = parts[1].trim();
@@ -86,21 +92,18 @@ public class Parser {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
                     LocalDateTime start = LocalDateTime.parse(startDateString, formatter);
                     LocalDateTime end = LocalDateTime.parse(endDateString, formatter);
-                    return new Event(parts[0].trim(), start.format(formatter), end.format(formatter));
+                    Event newTask = new Event(parts[0].trim(), start.format(formatter), end.format(formatter));
+                    taskList.addTask(newTask);
+                    storage.save(taskList);
+                    return "Event task added: " + parts[0].trim() + " from "
+                            + start.format(formatter) + " to " + end.format(formatter);
                 } catch (Exception e) {
-                    Ui.printError("Invalid date format. Please use yyyy-MM-dd HHmm.");
+                    return "Invalid date format. Please use yyyy-MM-dd HHmm.";
                 }
             }
-        } else if (input.startsWith("find")) {
-            String command = input.trim().split(" ")[0].toLowerCase();
-            String argument = input.substring(command.length()).trim();
-            if (argument.isEmpty()) {
-                Ui.printError("Please specify a keyword to search for.");
-            } else {
-                taskList.findTasks(argument);
-            }
         }
-        return null;
+
+        return "Unknown command. Please try again.";
     }
 
     /**
@@ -114,7 +117,7 @@ public class Parser {
         try {
             return Integer.parseInt(input.substring(command.length()).trim());
         } catch (NumberFormatException e) {
-            Ui.printError("Invalid task number.");
+            Ui.getErrorMessage("Invalid task number.");
             return -1;
         }
     }

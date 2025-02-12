@@ -1,6 +1,7 @@
 package buddy;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The TaskList class represents a collection of tasks and provides methods
@@ -24,9 +25,9 @@ public class TaskList {
      *
      * @param task the task to be added
      */
-    public void addTask(Task task) {
+    public String addTask(Task task) {
         tasks.add(task);
-        Ui.printAddTask(task, tasks.size());
+        return Ui.getAddTaskMessage(task, tasks.size());
     }
 
     /**
@@ -34,14 +35,13 @@ public class TaskList {
      *
      * @param index the index (1-based) of the task to be deleted
      */
-    public void deleteTask(int index) {
+    public String deleteTask(int index) {
         if (index < 1 || index > tasks.size()) {
-            Ui.printError("Invalid task number for deletion");
-            return;
+            return Ui.getErrorMessage("Invalid task number for deletion");
         }
 
         Task removedTask = tasks.remove(index - 1);
-        Ui.printDeleteTask(removedTask, tasks.size());
+        return Ui.getDeleteTaskMessage(removedTask, tasks.size());
     }
 
     /**
@@ -49,13 +49,12 @@ public class TaskList {
      *
      * @param index the index (1-based) of the task to be marked as done
      */
-    public void markTaskAsDone(int index) {
+    public String markTaskAsDone(int index) {
         if (index < 1 || index > tasks.size()) {
-            Ui.printError("Invalid task number for marking as done");
-            return;
+            return Ui.getErrorMessage("Invalid task number for marking as done");
         }
         tasks.get(index - 1).markAsDone();
-        Ui.printMarkTask(tasks.get(index - 1));
+        return Ui.getMarkTaskMessage(tasks.get(index - 1));
     }
 
     /**
@@ -63,13 +62,12 @@ public class TaskList {
      *
      * @param index the index (1-based) of the task to be unmarked
      */
-    public void unmarkTaskAsDone(int index) {
+    public String unmarkTaskAsDone(int index) {
         if (index < 1 || index > tasks.size()) {
-            Ui.printError("Invalid task number for unmarking");
-            return;
+            return Ui.getErrorMessage("Invalid task number for unmarking");
         }
         tasks.get(index - 1).unmarkAsDone();
-        Ui.printUnmarkTask(tasks.get(index - 1));
+        return Ui.getUnmarkTaskMessage(tasks.get(index - 1));
     }
 
     /**
@@ -77,27 +75,28 @@ public class TaskList {
      *
      * @param keyword the keyword to search for
      */
-    public void findTasks(String keyword) {
-        TaskList matchingTaskList = new TaskList(new ArrayList<>());
+    public String findTasks(String keyword) {
+        List<Task> foundTasks = tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase()
+                        .contains(keyword.toLowerCase()))
+                .toList();
 
-        for (Task task : tasks) {
-            if (task.toString().toLowerCase().contains(keyword.toLowerCase())) {
-                matchingTaskList.addTask(task);
-            }
+        if (foundTasks.isEmpty()) {
+            return "No tasks found matching that keyword.";
         }
 
-        if (matchingTaskList.isEmpty()) {
-            Ui.printError("No matching tasks found.");
-        } else {
-            Ui.printFoundTasks(matchingTaskList);
+        StringBuilder result = new StringBuilder("Found tasks:\n");
+        for (int i = 0; i < foundTasks.size(); i++) {
+            result.append(i + 1).append(". ").append(foundTasks.get(i).toString()).append("\n");
         }
+        return result.toString();
     }
 
     /**
      * Lists all tasks in the TaskList.
      */
-    public void listTasks() {
-        Ui.printTaskList(tasks);
+    public String listTasks() {
+        return Ui.getTaskList(tasks);
     }
 
     /**
