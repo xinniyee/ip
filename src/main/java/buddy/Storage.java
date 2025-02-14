@@ -90,19 +90,19 @@ public class Storage {
             return new ToDo(description, isDone);
         case "D":
             if (parts.length < 4) {
-                return null; // Incomplete data for task.Deadline
+                return null;
             }
             String by = parts[3];
             return new Deadline(description, by, isDone);
         case "E":
             if (parts.length < 5) {
-                return null; // Incomplete data for task.Event
+                return null;
             }
             String from = parts[3];
             String to = parts[4];
             return new Event(description, from, to, isDone);
         default:
-            return null; // If the task type is not recognized
+            return null;
         }
     }
 }

@@ -113,11 +113,15 @@ public class Parser {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
                     LocalDateTime start = LocalDateTime.parse(startDateString, formatter);
                     LocalDateTime end = LocalDateTime.parse(endDateString, formatter);
-                    Event newTask = new Event(parts[0].trim(), start.format(formatter), end.format(formatter));
-                    taskList.addTask(newTask);
-                    storage.save(taskList);
-                    return "Event task added: " + parts[0].trim() + " from "
-                            + start.format(formatter) + " to " + end.format(formatter);
+                    if (start.isBefore(end)) {
+                        Event newTask = new Event(parts[0].trim(), start.format(formatter), end.format(formatter));
+                        taskList.addTask(newTask);
+                        storage.save(taskList);
+                        return "Event task added: " + parts[0].trim() + " from "
+                                + start.format(formatter) + " to " + end.format(formatter);
+                    } else {
+                        return "Error: Start time must be before end time.";
+                    }
                 } catch (Exception e) {
                     return "Invalid date format. Please use yyyy-MM-dd HHmm.";
                 }
