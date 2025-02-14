@@ -1,11 +1,8 @@
 package buddy;
 
 import java.io.IOException;
-
 import java.nio.file.Paths;
-
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * The main class for the Buddy application.
@@ -32,37 +29,19 @@ public class Buddy {
         this.taskList = new TaskList(loadedTasks);
     }
 
-    /**
-     * Starts the Buddy application.
-     * Displays a welcome message and continuously processes user input.
-     */
-    public void run() throws IOException {
-        Ui.showWelcomeMessage();
-        Scanner scanner = new Scanner(System.in);
-
-        while (true) {
-            String userInput = scanner.nextLine();
-            if (userInput.equals("bye")) {
-                exit();
-                break;
-            }
-            Parser.parseCommand(userInput, taskList, storage);
-        }
-        scanner.close();
-    }
 
     /**
-     * Handles the exit process by displaying a goodbye message and saving tasks to file.
+     * Processes the user's input and returns the appropriate response.
+     *
+     * This method interprets the input provided by the user and generates a
+     * response accordingly. If the input is "bye", it handles the termination
+     * message. For all other inputs, it delegates the parsing and task
+     * management logic to the {@code Parser} class.
+     *
+     * @param input The user's input as a string.
+     * @return A string containing the appropriate response based on the user's input.
+     *         If an exception occurs during processing, an error message is returned.
      */
-    private void exit() {
-        Ui.getGoodbyeMessage();
-        try {
-            storage.save(taskList);
-        } catch (IOException e) {
-            Ui.getErrorMessage("Error saving tasks to file: " + e.getMessage());
-        }
-    }
-
     public String getResponse(String input) {
         try {
             // Use a StringBuilder to capture the response
@@ -78,19 +57,6 @@ public class Buddy {
             return response.toString();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
-        }
-    }
-
-
-    /**
-    * The main entry point for the Buddy application.
-    * Initializes and runs the application.
-    */
-    public static void main(String[] args) {
-        try {
-            new Buddy().run();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

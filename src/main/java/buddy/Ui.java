@@ -19,10 +19,12 @@ public class Ui {
     }
 
     /**
-     * Returns the list of tasks in the user's task list.
+     * Returns a formatted string displaying the list of tasks.
      *
-     * @param tasks the list of tasks to display
+     * @param tasks the list of tasks to be displayed
+     * @return the formatted task list as a string
      */
+
     public static String getTaskList(ArrayList<Task> tasks) {
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
@@ -34,10 +36,11 @@ public class Ui {
     }
 
     /**
-     * Returns a message confirming the addition of a new task to the list.
+     * Returns a message confirming the addition of a new task.
      *
      * @param task the task that was added
-     * @param size the current size of the task list
+     * @param size the current number of tasks in the list
+     * @return the formatted message confirming the addition
      */
     public static String getAddTaskMessage(Task task, int size) {
         return String.join("\n",
@@ -48,10 +51,11 @@ public class Ui {
     }
 
     /**
-     * Returns a message confirming the deletion of a task from the list.
+     * Returns a message confirming the deletion of a task.
      *
      * @param task the task that was removed
-     * @param size the current size of the task list
+     * @param size the current number of tasks in the list
+     * @return the formatted message confirming the deletion
      */
     public static String getDeleteTaskMessage(Task task, int size) {
         return String.join("\n",
@@ -62,9 +66,10 @@ public class Ui {
     }
 
     /**
-     * Returns a message confirming the marking of a task as done.
+     * Returns a message confirming that a task was marked as done.
      *
-     * @param task the task that was marked as done
+             * @param task the task that was marked as done
+     * @return the formatted message confirming the task completion
      */
     public static String getMarkTaskMessage(Task task) {
         return String.join("\n",
@@ -74,9 +79,10 @@ public class Ui {
     }
 
     /**
-     * Returns a message confirming the unmarking of a task as done.
+     * Returns a message confirming that a task was unmarked as done.
      *
      * @param task the task that was unmarked
+     * @return the formatted message confirming the unmarking
      */
     public static String getUnmarkTaskMessage(Task task) {
         return String.join("\n",
@@ -86,37 +92,14 @@ public class Ui {
     }
 
     /**
-     * Returns an error message.
+     * Returns an error message with the provided details.
      *
-     * @param message the error message to display
+     * @param message the error message to be displayed
+     * @return the formatted error message
      */
     public static String getErrorMessage(String message) {
         return String.join("\n",
                 message
-        );
-    }
-
-    /**
-     * Returns a list of tasks that match the search keyword.
-     *
-     * @param matchingTaskList the list of tasks that matched the search
-     */
-    public static String getFoundTasksMessage(TaskList matchingTaskList) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("Here are the matching tasks in your list:").append("\n");
-        for (int i = 0; i < matchingTaskList.size(); i++) {
-            sb.append((i + 1)).append(". ").append(matchingTaskList.get(i)).append("\n");
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Returns the goodbye message when the program ends.
-     */
-    public static String getGoodbyeMessage() {
-        return String.join("\n",
-                "Bye. Hope to see you again soon!"
         );
     }
 }

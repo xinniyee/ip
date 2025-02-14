@@ -23,7 +23,8 @@ public class TaskList {
     /**
      * Adds a task to the TaskList.
      *
-     * @param task the task to be added
+     * @param task The task to be added.
+     * @return A message confirming the task has been added, including the total number of tasks.
      */
     public String addTask(Task task) {
         tasks.add(task);
@@ -34,6 +35,7 @@ public class TaskList {
      * Deletes a task from the TaskList by index.
      *
      * @param index the index (1-based) of the task to be deleted
+     * @return A message confirming the task has been deleted, or an error message if the index is invalid.
      */
     public String deleteTask(int index) {
         if (index < 1 || index > tasks.size()) {
@@ -48,6 +50,7 @@ public class TaskList {
      * Marks a task as done by index.
      *
      * @param index the index (1-based) of the task to be marked as done
+     * @return A message confirming the task has been marked as done, or an error message if the index is invalid.
      */
     public String markTaskAsDone(int index) {
         if (index < 1 || index > tasks.size()) {
@@ -61,6 +64,7 @@ public class TaskList {
      * Unmarks a task as done by index.
      *
      * @param index the index (1-based) of the task to be unmarked
+     * @return A message confirming the task has been unmarked as done, or an error message if the index is invalid.
      */
     public String unmarkTaskAsDone(int index) {
         if (index < 1 || index > tasks.size()) {
@@ -74,6 +78,7 @@ public class TaskList {
      * Finds tasks that contain the given keyword in their description.
      *
      * @param keyword the keyword to search for
+     * @return A list of tasks containing the keyword, or a message indicating no matching tasks were found.
      */
     public String findTasks(String keyword) {
         List<Task> foundTasks = tasks.stream()
@@ -94,6 +99,8 @@ public class TaskList {
 
     /**
      * Lists all tasks in the TaskList.
+     *
+     * @return A formatted string listing all tasks in the TaskList.
      */
     public String listTasks() {
         return Ui.getTaskList(tasks);

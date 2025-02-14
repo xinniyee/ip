@@ -6,16 +6,25 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Handles parsing of user input and executing the corresponding commands.
+ * This class is responsible for interpreting user commands and delegating the
+ * appropriate operations to the TaskList and Storage classes. It supports commands
+ * for listing tasks, adding tasks (ToDo, Deadline, Event), marking tasks as done,
+ * unmarking tasks, deleting tasks, and finding tasks based on keywords.
  */
 public class Parser {
 
     /**
      * Parses and executes the given command.
      *
-     * @param input The user input command.
-     * @param taskList  The task list to modify based on the command.
-     * @param storage The storage to save changes
-     * @return The response message to be displayed to the user.
+     * Depending on the user's input, this method performs actions such as
+     * listing tasks, marking tasks as done, unmarking tasks, deleting tasks,
+     * or adding new tasks. For unsupported commands, an error message is returned.
+     *
+     * @param input    The user input command as a string.
+     * @param taskList The task list to modify based on the command.
+     * @param storage  The storage system to save changes to the task list.
+     * @return A string response to be displayed to the user, indicating the result of the command.
+     * @throws IOException If an error occurs while saving to the storage.
      */
     public static String parseCommand(String input, TaskList taskList, Storage storage) throws IOException {
         if (input.equals("list")) {
@@ -52,6 +61,18 @@ public class Parser {
         return Ui.getErrorMessage("Sorry, I'm not sure what you mean.");
     }
 
+    /**
+     * Parses a task addition command and adds the corresponding task to the task list.
+     *
+     * Supports three types of tasks: ToDo, Deadline, and Event. Each type of task
+     * requires specific formatting in the user input.
+     *
+     * @param taskList The task list to which the new task will be added.
+     * @param input    The user input command specifying the task to be added.
+     * @param storage  The storage system to save changes to the task list.
+     * @return A string response confirming the addition of the task or an error message.
+     * @throws IOException If an error occurs while saving to the storage.
+     */
     private static String parseTask(TaskList taskList, String input, Storage storage) throws IOException {
         if (input.startsWith("todo")) {
             String description = input.substring(4).trim();
@@ -109,9 +130,12 @@ public class Parser {
     /**
      * Parses the task index from a command input string.
      *
-     * @param input The full command string.
-     * @param command   The specific command (e.g. "mark", "delete")
-     * @return  The parsed task index, or -1 if invalid.
+     * This method is used to extract the task index for commands like "mark",
+     * "unmark", or "delete". If the input is invalid, an error message is displayed.
+     *
+     * @param input   The full command string entered by the user.
+     * @param command The specific command (e.g., "mark", "delete").
+     * @return The parsed task index, or -1 if the input is invalid.
      */
     private static int parseTaskIndex(String input, String command) {
         try {
