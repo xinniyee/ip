@@ -26,7 +26,9 @@ public class Buddy {
             Ui.getErrorMessage("Error loading tasks from file: " + e.getMessage());
             loadedTasks = new ArrayList<>();
         }
+        assert loadedTasks != null : "Loaded tasks should never be null";
         this.taskList = new TaskList(loadedTasks);
+        assert this.taskList != null : "TaskList should not be null after initialization";
     }
 
 
@@ -43,14 +45,14 @@ public class Buddy {
      *         If an exception occurs during processing, an error message is returned.
      */
     public String getResponse(String input) {
+        assert input != null : "Input should not be null";
+
         try {
-            // Use a StringBuilder to capture the response
             StringBuilder response = new StringBuilder();
 
             if (input.equals("bye")) {
                 response.append("Goodbye! Hope to see you again soon.");
             } else {
-                // Redirect input to the Parser
                 response.append(Parser.parseCommand(input, taskList, storage));
             }
 

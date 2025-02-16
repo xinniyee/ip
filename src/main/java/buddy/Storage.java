@@ -25,6 +25,7 @@ public class Storage {
      * @param filePath  The path to the file where tasks are stored.
      */
     public Storage(String filePath) {
+        assert filePath != null && !filePath.isEmpty() : "File path must not be null or empty.";
         this.filePath = Paths.get(filePath);
     }
 
@@ -36,6 +37,7 @@ public class Storage {
      * @throws IOException  If an error occurs while reading the file.
      */
     public List<Task> load() throws IOException {
+        assert filePath != null : "File path must not be null.";
         if (!Files.exists(filePath)) {
             Files.createDirectories(filePath.getParent()); // Ensure the directory exists
             Files.createFile(filePath); // Create an empty file if it doesn't exist
@@ -43,6 +45,7 @@ public class Storage {
         }
 
         List<String> lines = Files.readAllLines(filePath);
+        assert lines != null : "Lines read from file should not be null.";
         List<Task> tasks = new ArrayList<>();
         for (String line : lines) {
             Task task = fromFileFormat(line);
@@ -60,6 +63,9 @@ public class Storage {
      * @throws IOException  If an error occurs while writing to the file.
      */
     public void save(TaskList taskList) throws IOException {
+        assert taskList != null : "TaskList must not be null.";
+        assert taskList.getTasks() != null : "TaskList.getTasks() must not return null.";
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toString()))) {
             for (Task task : taskList.getTasks()) {
                 writer.write(task.toFileFormat());

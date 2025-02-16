@@ -27,20 +27,27 @@ public class Parser {
      * @throws IOException If an error occurs while saving to the storage.
      */
     public static String parseCommand(String input, TaskList taskList, Storage storage) throws IOException {
+        assert input != null : "Input should not be null.";
+        assert taskList != null : "TaskList should not be null.";
+        assert storage != null : "Storage should not be null.";
+
         if (input.equals("list")) {
             return taskList.listTasks();
         } else if (input.startsWith("mark")) {
             int index = parseTaskIndex(input, "mark");
+            assert index > 0 : "Task index should be a positive integer.";
             String response = taskList.markTaskAsDone(index);
             storage.save(taskList);
             return response;
         } else if (input.startsWith("unmark")) {
             int index = parseTaskIndex(input, "unmark");
+            assert index > 0 : "Task index should be a positive integer.";
             String response = taskList.unmarkTaskAsDone(index);
             storage.save(taskList);
             return response;
         } else if (input.startsWith("delete")) {
             int index = parseTaskIndex(input, "delete");
+            assert index > 0 : "Task index should be a positive integer.";
             String response = taskList.deleteTask(index);
             storage.save(taskList);
             return response;
@@ -52,6 +59,7 @@ public class Parser {
             return response;
         } else if (input.startsWith("find")) {
             String keyword = input.substring(4).trim();
+            assert keyword != null : "Keyword should not be null.";
             if (keyword.isEmpty()) {
                 return Ui.getErrorMessage("Please specify a keyword to search for.");
             } else {
@@ -74,6 +82,10 @@ public class Parser {
      * @throws IOException If an error occurs while saving to the storage.
      */
     private static String parseTask(TaskList taskList, String input, Storage storage) throws IOException {
+        assert taskList != null : "TaskList should not be null.";
+        assert input != null : "Input should not be null.";
+        assert storage != null : "Storage should not be null.";
+
         if (input.startsWith("todo")) {
             String description = input.substring(4).trim();
             if (description.isEmpty()) {
@@ -142,6 +154,8 @@ public class Parser {
      * @return The parsed task index, or -1 if the input is invalid.
      */
     private static int parseTaskIndex(String input, String command) {
+        assert input != null : "Input should not be null.";
+        assert command != null : "Command should not be null.";
         try {
             return Integer.parseInt(input.substring(command.length()).trim());
         } catch (NumberFormatException e) {
