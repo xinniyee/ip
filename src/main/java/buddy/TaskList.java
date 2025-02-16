@@ -1,7 +1,8 @@
 package buddy;
 
+import static buddy.FuzzySearch.fuzzySearch;
+
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The TaskList class represents a collection of tasks and provides methods
@@ -81,20 +82,8 @@ public class TaskList {
      * @return A list of tasks containing the keyword, or a message indicating no matching tasks were found.
      */
     public String findTasks(String keyword) {
-        List<Task> foundTasks = tasks.stream()
-                .filter(task -> task.getDescription().toLowerCase()
-                        .contains(keyword.toLowerCase()))
-                .toList();
-
-        if (foundTasks.isEmpty()) {
-            return "No tasks found matching that keyword.";
-        }
-
-        StringBuilder result = new StringBuilder("Found tasks:\n");
-        for (int i = 0; i < foundTasks.size(); i++) {
-            result.append(i + 1).append(". ").append(foundTasks.get(i).toString()).append("\n");
-        }
-        return result.toString();
+        String foundTasks = fuzzySearch(tasks, keyword);
+        return foundTasks;
     }
 
     /**
