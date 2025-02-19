@@ -42,9 +42,12 @@ public class Ui {
      */
 
     public static String getTaskList(ArrayList<Task> tasks) {
+        if (tasks.isEmpty()) {
+            return "📋 Your task list is empty! Start adding tasks to stay organized. 😊";
+        }
+
         StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("Here are the tasks in your list:").append("\n");
+        sb.append("📋 Here are your tasks:\n");
         for (int i = 0; i < tasks.size(); i++) {
             sb.append((i + 1)).append(". ").append(tasks.get(i)).append("\n");
         }
@@ -114,8 +117,6 @@ public class Ui {
      * @return the formatted error message
      */
     public static String getErrorMessage(String message) {
-        return String.join("\n",
-                message
-        );
+        return message;
     }
 }
