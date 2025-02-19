@@ -31,21 +31,23 @@ public class Parser {
         assert taskList != null : "TaskList should not be null.";
         assert storage != null : "Storage should not be null.";
 
-        if (input.equals("list")) {
+        String command = input.split(" ")[0].toLowerCase();
+
+        if (command.equals("list")) {
             return taskList.listTasks();
-        } else if (input.startsWith("mark")) {
+        } else if (command.equals("mark")) {
             int index = parseTaskIndex(input, "mark");
             assert index > 0 : "Task index should be a positive integer.";
             String response = taskList.markTaskAsDone(index);
             storage.save(taskList);
             return response;
-        } else if (input.startsWith("unmark")) {
+        } else if (command.equals("unmark")) {
             int index = parseTaskIndex(input, "unmark");
             assert index > 0 : "Task index should be a positive integer.";
             String response = taskList.unmarkTaskAsDone(index);
             storage.save(taskList);
             return response;
-        } else if (input.startsWith("delete")) {
+        } else if (command.equals("delete")) {
             int index = parseTaskIndex(input, "delete");
             assert index > 0 : "Task index should be a positive integer.";
             String response = taskList.deleteTask(index);
@@ -53,11 +55,11 @@ public class Parser {
             return response;
         } else if (input.isEmpty()) {
             return Ui.getErrorMessage("Please provide an input.");
-        } else if (input.startsWith("todo") || input.startsWith("deadline")
-                || input.startsWith("event")) {
+        } else if (command.equals("todo") || command.equals("deadline")
+                || command.equals("event")) {
             String response = parseTask(taskList, input, storage);
             return response;
-        } else if (input.startsWith("find")) {
+        } else if (command.equals("find")) {
             String keyword = input.substring(4).trim();
             assert keyword != null : "Keyword should not be null.";
             if (keyword.isEmpty()) {
@@ -87,7 +89,8 @@ public class Parser {
         assert storage != null : "Storage should not be null.";
 
         input = input.replaceAll("/", "");
-        if (input.startsWith("todo")) {
+        String command = input.split(" ")[0].toLowerCase();
+        if (command.equals("todo")) {
             String description = input.substring(4).trim();
             if (description.isEmpty()) {
                 return "The description of a todo cannot be empty.";
@@ -97,7 +100,7 @@ public class Parser {
                 storage.save(taskList);
                 return "Todo task added: " + description;
             }
-        } else if (input.startsWith("deadline")) {
+        } else if (command.equals("deadline")) {
             String[] parts = input.substring(8).split(" by ", 2);
             if (parts[0].trim().isEmpty() || parts.length < 2 || parts[1].trim().isEmpty()) {
                 return "The description or deadline must be provided.";
@@ -114,7 +117,7 @@ public class Parser {
                     return "Invalid date format. Please use yyyy-MM-dd HHmm.";
                 }
             }
-        } else if (input.startsWith("event")) {
+        } else if (command.equals("event")) {
             String[] parts = input.substring(5).split(" from | to ", 3);
             if (parts[0].trim().isEmpty() || parts.length < 3
                     || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
