@@ -1,6 +1,7 @@
 package gui;
 
 import buddy.Buddy;
+import buddy.Ui;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -50,9 +51,9 @@ public class MainWindow extends AnchorPane {
 
     /** Method to show the welcome message */
     private void showWelcomeMessage() {
-        String welcomeMessage = "Welcome to Buddy! How can I assist you today?";
+        String welcomeMessage = Ui.showWelcomeMessage();
         dialogContainer.getChildren().add(
-                DialogBox.getDukeDialog(welcomeMessage, buddyImage)  // Use buddyImage for the welcome message
+                DialogBox.getDukeDialog(welcomeMessage, buddyImage)
         );
     }
 }
