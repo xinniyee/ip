@@ -84,7 +84,7 @@ public class Storage {
     private static Task fromFileFormat(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
-            return null; // Handle corrupted lines gracefully
+            return null;
         }
 
         String type = parts[0];

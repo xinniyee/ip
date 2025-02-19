@@ -86,6 +86,7 @@ public class Parser {
         assert input != null : "Input should not be null.";
         assert storage != null : "Storage should not be null.";
 
+        input = input.replaceAll("/", "");
         if (input.startsWith("todo")) {
             String description = input.substring(4).trim();
             if (description.isEmpty()) {
@@ -97,7 +98,7 @@ public class Parser {
                 return "Todo task added: " + description;
             }
         } else if (input.startsWith("deadline")) {
-            String[] parts = input.substring(8).split(" /by ", 2);
+            String[] parts = input.substring(8).split(" by ", 2);
             if (parts[0].trim().isEmpty() || parts.length < 2 || parts[1].trim().isEmpty()) {
                 return "The description or deadline must be provided.";
             } else {
@@ -114,7 +115,7 @@ public class Parser {
                 }
             }
         } else if (input.startsWith("event")) {
-            String[] parts = input.substring(5).split(" /from | /to ", 3);
+            String[] parts = input.substring(5).split(" from | to ", 3);
             if (parts[0].trim().isEmpty() || parts.length < 3
                     || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
                 return "The description, start time, or end time of an event must be provided.";
