@@ -66,7 +66,7 @@ public class Parser {
                 return taskList.findTasks(keyword);
             }
         }
-        return Ui.getErrorMessage("Sorry, I'm not sure what you mean.");
+        return Ui.getErrorMessage("Sorry, I'm not sure what you mean. Please check your input and try again.");
     }
 
     /**

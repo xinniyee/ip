@@ -46,8 +46,16 @@ public class FuzzySearch {
      */
     public static String fuzzySearch(List<Task> tasks, String keyword) {
         List<Task> foundTasks = tasks.stream()
-                .filter(task -> getLevenshteinDistance(task.getDescription().toLowerCase(),
-                        keyword.toLowerCase()) <= 2)
+                .filter(task -> {
+                    String[] taskWords = task.getDescription().toLowerCase().split("\\s+");
+                    for (String taskWord : taskWords) {
+                        int distance = getLevenshteinDistance(taskWord, keyword.toLowerCase());
+                        if (distance <= 2) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
                 .toList();
 
         if (foundTasks.isEmpty()) {
