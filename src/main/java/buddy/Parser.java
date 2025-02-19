@@ -96,9 +96,9 @@ public class Parser {
                 return "The description of a todo cannot be empty.";
             } else {
                 ToDo newTask = new ToDo(description);
-                taskList.addTask(newTask);
+                String output = taskList.addTask(newTask);
                 storage.save(taskList);
-                return "Todo task added: " + description;
+                return output;
             }
         } else if (command.equals("deadline")) {
             String[] parts = input.substring(8).split(" by ", 2);
@@ -110,9 +110,9 @@ public class Parser {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
                     LocalDateTime deadline = LocalDateTime.parse(dateString, formatter);
                     Deadline newTask = new Deadline(parts[0].trim(), deadline.format(formatter));
-                    taskList.addTask(newTask);
+                    String output = taskList.addTask(newTask);
                     storage.save(taskList);
-                    return "Deadline task added: " + parts[0].trim() + " by " + deadline.format(formatter);
+                    return output;
                 } catch (Exception e) {
                     return "Invalid date format. Please use yyyy-MM-dd HHmm.";
                 }
@@ -131,10 +131,9 @@ public class Parser {
                     LocalDateTime end = LocalDateTime.parse(endDateString, formatter);
                     if (start.isBefore(end)) {
                         Event newTask = new Event(parts[0].trim(), start.format(formatter), end.format(formatter));
-                        taskList.addTask(newTask);
+                        String output = taskList.addTask(newTask);
                         storage.save(taskList);
-                        return "Event task added: " + parts[0].trim() + " from "
-                                + start.format(formatter) + " to " + end.format(formatter);
+                        return output;
                     } else {
                         return "Error: Start time must be before end time.";
                     }

@@ -50,8 +50,8 @@ public class Buddy {
         try {
             StringBuilder response = new StringBuilder();
 
-            if (input.equals("bye")) {
-                response.append("Goodbye! Hope to see you again soon.");
+            if (input.strip().equals("bye")) {
+                response.append("Goodbye👋! Hope to see you again soon.");
             } else {
                 response.append(Parser.parseCommand(input, taskList, storage));
             }
