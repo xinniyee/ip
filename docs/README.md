@@ -11,7 +11,8 @@ Buddy is your personal task manager 📋, designed to help you stay organized an
 ## Features:
 - Add and manage different types of tasks (To-Do, Deadline, Event)
 - Search for tasks by keywords 🔍 
-- Mark tasks as done ✅ or remove them ❌ 
+- Mark tasks as done ✅ or unmark them ❌
+- Delete task
 - View your full task list 📋
 
 ## Adding Todos
@@ -31,7 +32,7 @@ todo buy milk
 **Expected Outcome**:
 ```
 Got it. I've added this task:
- [T][ ] read book
+ [T][ ] buy milk
 Now you have 1 tasks in the list.
 ```
 
@@ -77,7 +78,7 @@ event exams /from 2025-03-08 1530 /to 2025-03-10 1930
 **Expected Outcome**:
 ```
 Got it. I've added this task:
- [E][ ] project meeting (from: Mar 08 2025, 3:30 pm to: Mar 10 2025, 7:30 pm)
+ [E][ ] exams (from: Mar 08 2025, 3:30 pm to: Mar 10 2025, 7:30 pm)
 Now you have 4 tasks in the list.
 ```
 
@@ -194,7 +195,7 @@ Found tasks:
 
 ## 💡Tips
 
-You can type commands in uppercase or lowercase—Buddy understands both!
+You can type commands in uppercase or lowercase — Buddy understands both!
 
 When using the find command, Buddy will try to understand your typos!
 
