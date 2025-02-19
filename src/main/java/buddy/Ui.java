@@ -12,10 +12,16 @@ public class Ui {
      * Returns the welcome message when the program starts.
      */
     public static String showWelcomeMessage() {
-        return String.join("\n",
-                "Hello! I'm Duke.Buddy",
-                "What can I do for you?"
-        );
+        return "Hello! I'm Duke, your personal task manager.\n"
+                + "Here's what you can do:\n"
+                + "- Add a task: todo <task>\n"
+                + "- Set a deadline: deadline <task> /by yyyy-MM-dd HHmm\n"
+                + "- Schedule an event: event <task> /from yyyy-MM-dd HHmm /to yyyy-MM-dd HHmm\n"
+                + "- View tasks: list\n"
+                + "- Find tasks: find <keyword>\n"
+                + "- Mark tasks as done: done <task index>\n"
+                + "- Delete a task: delete <task index>\n"
+                + "- Exit: bye\n";
     }
 
     /**
